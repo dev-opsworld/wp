@@ -1,0 +1,31 @@
+version: "3"
+services:
+  database:
+    container_name: mysql_cont
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wp
+      MYSQL_USER: dpay
+      MYSQL_PASSWORD: wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+
+  wordpress:
+    ports:
+      - "80:80"
+    depends_on:
+      - database
+    image: wordpress:latest
+    restart: always
+    volumes:
+      ["./:/var/www/html"]
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_USER: dpay
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wp
+
+volumes:
+  db_data: {}
